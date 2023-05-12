@@ -3,6 +3,8 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -30,22 +32,27 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
 
 
-        LogWindow logWindow = createLogWindow();
-        addWindow(logWindow);
-
+        addWindow(createLogWindow());
         addWindow(new GameWindow(bundle, 400, 400));
 
         setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ExitConfirm();
+            }
+        });
+
     }
 
     protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
         logWindow.pack();
-        Logger.debug(bundle.getString("protocolWork"));
+        Logger.debug("Протокол работает");
         return logWindow;
     }
 
@@ -103,19 +110,24 @@ public class MainApplicationFrame extends JFrame {
         JMenu exitMenu = new JMenu(bundle.getString("quit"));
         exitMenu.setMnemonic(KeyEvent.VK_X);
         JMenuItem exitMenuItem = new JMenuItem(bundle.getString("ExitTheApplication"), KeyEvent.VK_S);
-        exitMenuItem.addActionListener((event) -> {
-            int confirm = JOptionPane.showOptionDialog(this,
-                    bundle.getString("quitQuestion"),
-                    bundle.getString("quitTitle"),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new String[]{bundle.getString("yes"), bundle.getString("no")},
-                    null);
-            if (confirm == JOptionPane.YES_OPTION) System.exit(0);
-        });
+        exitMenuItem.addActionListener((event) -> ExitConfirm());
         exitMenu.add(exitMenuItem);
         return exitMenu;
+    }
+
+    private void ExitConfirm() {
+        int confirm = JOptionPane.showOptionDialog(this,
+                bundle.getString("quitQuestion"),
+                bundle.getString("quitTitle"),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[]{"Да", "Нет"},
+                null);
+        if (confirm == JOptionPane.YES_OPTION) {
+            dispose();
+            System.exit(0);
+        }
     }
 
     private void setLookAndFeel(String className) {

@@ -8,7 +8,7 @@ import javax.swing.UIManager;
 
 public class RobotsProgram {
     public static void main(String[] args) {
-        ResourceBundle bundle = ResourceBundle.getBundle("ru");
+        ResourceBundle bundle = ResourceBundle.getBundle("resources");
         Components.translateСomponents(bundle);
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");

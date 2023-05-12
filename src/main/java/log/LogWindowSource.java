@@ -42,12 +42,8 @@ public class LogWindowSource {
         m_messages.add(entry);
         LogChangeListener[] activeListeners = m_activeListeners;
         if (activeListeners == null) {
-            synchronized (m_listeners) {
-                if (m_activeListeners == null) {
-                    activeListeners = m_listeners.toArray(new LogChangeListener[0]);
-                    m_activeListeners = activeListeners;
-                }
-            }
+            activeListeners = m_listeners.toArray(new LogChangeListener[0]);
+            m_activeListeners = activeListeners;
         }
         for (LogChangeListener listener : activeListeners) {
             listener.onLogChanged();
