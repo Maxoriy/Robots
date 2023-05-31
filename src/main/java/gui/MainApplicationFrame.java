@@ -24,7 +24,10 @@ public class MainApplicationFrame extends JFrame {
     private final ResourceBundle bundle;
     private final ObjectState configuration = new Configuration();
     private final LogWindow logWindow = createLogWindow();
-    private final GameWindow gameWindow = new GameWindow(400, 400);
+    private final ModelRobot modelRobot = new ModelRobot();
+    private final RobotController robotController = new RobotController(modelRobot, new RobotView());
+    private final GameWindow gameWindow = new GameWindow(robotController, 400, 400);
+    private final PositionWindow positionWindow = new PositionWindow(modelRobot, 300, 100);
 
     public MainApplicationFrame(ResourceBundle defaultBundle, int inset) {
         //Make the big window be indented 50 pixels from each edge
@@ -36,6 +39,9 @@ public class MainApplicationFrame extends JFrame {
                 screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
+
+        addWindow(positionWindow);
+
         addWindow(logWindow);
         addWindow(gameWindow);
 
@@ -141,6 +147,7 @@ public class MainApplicationFrame extends JFrame {
         JSONObject json = new JSONObject();
         saveConfigurationElement("logWindow", json, logWindow);
         saveConfigurationElement("gameWindow", json, gameWindow);
+        saveConfigurationElement("positionWindow", json, positionWindow);
         configuration.save(json);
     }
 
@@ -158,6 +165,8 @@ public class MainApplicationFrame extends JFrame {
         logWindow.setLocation(Integer.parseInt(config.get("logWindowX").toString()), Integer.parseInt(config.get("logWindowY").toString()));
         gameWindow.setSize(Integer.parseInt(config.get("gameWindowWidth").toString()), Integer.parseInt(config.get("gameWindowHeight").toString()));
         gameWindow.setLocation(Integer.parseInt(config.get("gameWindowX").toString()), Integer.parseInt(config.get("gameWindowY").toString()));
+        positionWindow.setSize(Integer.parseInt(config.get("positionWindowWidth").toString()), Integer.parseInt(config.get("positionWindowHeight").toString()));
+        positionWindow.setLocation(Integer.parseInt(config.get("positionWindowX").toString()), Integer.parseInt(config.get("positionWindowY").toString()));
     }
 
     private void setLookAndFeel(String className) {
