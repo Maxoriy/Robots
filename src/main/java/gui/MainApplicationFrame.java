@@ -118,7 +118,7 @@ public class MainApplicationFrame extends JFrame {
         JMenu exitMenu = new JMenu(bundle.getString("quit"));
         exitMenu.setMnemonic(KeyEvent.VK_X);
         JMenuItem exitMenuItem = new JMenuItem(bundle.getString("ExitTheApplication"), KeyEvent.VK_S);
-        exitMenuItem.addActionListener((event) -> ExitConfirm());
+        exitMenuItem.addActionListener((event) -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
         exitMenu.add(exitMenuItem);
         return exitMenu;
     }
