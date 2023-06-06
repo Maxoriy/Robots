@@ -122,7 +122,7 @@ public class MainApplicationFrame extends JFrame {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new String[]{"Да", "Нет"},
+                new String[]{bundle.getString("yes"), bundle.getString("no")},
                 null);
         if (confirm == JOptionPane.YES_OPTION) {
             dispose();
