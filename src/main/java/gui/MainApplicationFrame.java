@@ -10,9 +10,8 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 import log.Logger;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import serialization.Configuration;
-import serialization.ObjectState;
 
 /**
  * Что требуется сделать:
@@ -22,9 +21,9 @@ import serialization.ObjectState;
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final ResourceBundle bundle;
-    private final ObjectState configuration = new Configuration();
-    private final LogWindow logWindow = createLogWindow();
-    private final GameWindow gameWindow = new GameWindow(400, 400);
+    private final Configuration configuration = new Configuration();
+    private final LogWindow logWindow;
+    private final GameWindow gameWindow;
 
     public MainApplicationFrame(ResourceBundle defaultBundle, int inset) {
         //Make the big window be indented 50 pixels from each edge
@@ -36,7 +35,10 @@ public class MainApplicationFrame extends JFrame {
                 screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
+
+        logWindow = createLogWindow();
         addWindow(logWindow);
+        gameWindow = new GameWindow(bundle, 400, 400);
         addWindow(gameWindow);
 
         loadConfiguration();
@@ -153,11 +155,14 @@ public class MainApplicationFrame extends JFrame {
 
     private void loadConfiguration() {
         JSONObject config = configuration.load();
-        if (config == null) return;
-        logWindow.setSize(Integer.parseInt(config.get("logWindowWidth").toString()), Integer.parseInt(config.get("logWindowHeight").toString()));
-        logWindow.setLocation(Integer.parseInt(config.get("logWindowX").toString()), Integer.parseInt(config.get("logWindowY").toString()));
-        gameWindow.setSize(Integer.parseInt(config.get("gameWindowWidth").toString()), Integer.parseInt(config.get("gameWindowHeight").toString()));
-        gameWindow.setLocation(Integer.parseInt(config.get("gameWindowX").toString()), Integer.parseInt(config.get("gameWindowY").toString()));
+        if (config.has("logWindowWidth") && config.has("logWindowX")) {
+            logWindow.setSize(config.optInt("logWindowWidth"), config.optInt("logWindowHeight"));
+            logWindow.setLocation(config.optInt("logWindowX"), config.optInt("logWindowY"));
+        }
+        if (config.has("gameWindowWidth") && config.has("gameWindowX")) {
+            gameWindow.setSize(config.optInt("gameWindowWidth"), config.optInt("gameWindowHeight"));
+            gameWindow.setLocation(config.optInt("gameWindowX"), config.optInt("gameWindowY"));
+        }
     }
 
     private void setLookAndFeel(String className) {
