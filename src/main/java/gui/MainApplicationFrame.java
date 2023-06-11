@@ -24,6 +24,7 @@ public class MainApplicationFrame extends JFrame {
     private final Configuration configuration = new Configuration();
     private final LogWindow logWindow;
     private final GameWindow gameWindow;
+    private final PositionWindow positionWindow;
 
     public MainApplicationFrame(ResourceBundle defaultBundle, int inset) {
         //Make the big window be indented 50 pixels from each edge
@@ -38,8 +39,14 @@ public class MainApplicationFrame extends JFrame {
 
         logWindow = createLogWindow();
         addWindow(logWindow);
-        gameWindow = new GameWindow(bundle, 400, 400);
+        
+        RobotModel robotModel = new RobotModel();
+        RobotController robotController = new RobotController(robotModel);
+        gameWindow = new GameWindow(bundle, robotController, 400, 400);
         addWindow(gameWindow);
+
+        positionWindow = new PositionWindow(robotModel, 300, 100);
+        addWindow(positionWindow);
 
         loadConfiguration();
 
@@ -142,6 +149,7 @@ public class MainApplicationFrame extends JFrame {
         JSONObject json = new JSONObject();
         saveConfigurationElement("logWindow", json, logWindow);
         saveConfigurationElement("gameWindow", json, gameWindow);
+        saveConfigurationElement("positionWindow", json, positionWindow);
         configuration.save(json);
     }
 
@@ -161,6 +169,10 @@ public class MainApplicationFrame extends JFrame {
         if (config.has("gameWindowWidth") && config.has("gameWindowX")) {
             gameWindow.setSize(config.optInt("gameWindowWidth"), config.optInt("gameWindowHeight"));
             gameWindow.setLocation(config.optInt("gameWindowX"), config.optInt("gameWindowY"));
+        }
+        if (config.has("positionWindowWidth") && config.has("positionWindowX")) {
+            positionWindow.setSize(config.optInt("positionWindowWidth"), config.optInt("positionWindowHeight"));
+            positionWindow.setLocation(config.optInt("positionWindowX"), config.optInt("positionWindowY"));
         }
     }
 

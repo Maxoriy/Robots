@@ -5,7 +5,7 @@ import java.util.Observable;
 import static gui.GameVisualizer.*;
 import static tools.MathTools.*;
 
-public class ModelRobot extends Observable {
+public class RobotModel extends Observable {
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
     private volatile double m_robotDirection = 0;
@@ -14,25 +14,14 @@ public class ModelRobot extends Observable {
         return m_robotPositionX;
     }
 
-    public void setM_robotPositionX(double positionX) {
-        m_robotPositionX = positionX;
-    }
-
     public double getM_robotPositionY() {
         return m_robotPositionY;
-    }
-
-    public void setM_robotPositionY(double positionY) {
-        m_robotPositionY = positionY;
     }
 
     public double getM_robotDirection() {
         return m_robotDirection;
     }
 
-    public void setM_robotDirection(double direction) {
-        m_robotDirection = direction;
-    }
 
     public void moveRobot(double velocity, double angularVelocity, double duration) {
         velocity = applyLimits(velocity, 0, maxVelocity);
@@ -46,9 +35,9 @@ public class ModelRobot extends Observable {
         } else {
             newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         }
-        setM_robotPositionX(newX);
-        setM_robotPositionY(newY);
-        setM_robotDirection(newDirection);
+        m_robotPositionX = newX;
+        m_robotPositionY = newY;
+        m_robotDirection = newDirection;
 
         setChanged();
         notifyObservers();

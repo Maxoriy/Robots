@@ -3,31 +3,25 @@ package gui;
 import java.awt.*;
 
 public class RobotController {
-    private final ModelRobot modelRobot;
-    private final RobotView robotView;
+    private final RobotModel robotModel;
 
-    public RobotController(ModelRobot modelRobot, RobotView robotView) {
-        this.modelRobot = modelRobot;
-        this.robotView = robotView;
+    public RobotController(RobotModel robotModel) {
+        this.robotModel = robotModel;
     }
 
     public double getPositionX() {
-        return modelRobot.getM_robotPositionX();
+        return robotModel.getM_robotPositionX();
     }
 
     public double getPositionY() {
-        return modelRobot.getM_robotPositionY();
+        return robotModel.getM_robotPositionY();
     }
 
     public double getDirection() {
-        return modelRobot.getM_robotDirection();
+        return robotModel.getM_robotDirection();
     }
 
     public void move(double velocity, double angularVelocity, double duration) {
-        modelRobot.moveRobot(velocity, angularVelocity, duration);
-    }
-
-    public void draw(Graphics2D g) {
-        robotView.drawRobot(g, modelRobot);
+        robotModel.moveRobot(velocity, angularVelocity, duration);
     }
 }

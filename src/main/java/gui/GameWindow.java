@@ -7,9 +7,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 public class GameWindow extends JInternalFrame {
-    public GameWindow(ResourceBundle bundle, int width, int height) {
+    public GameWindow(ResourceBundle bundle, RobotController robotController, int width, int height) {
         super(bundle.getString("gameWindowHeader"), true, true, true, true);
-        GameVisualizer m_visualizer = new GameVisualizer();
+        GameVisualizer m_visualizer = new GameVisualizer(robotController);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
