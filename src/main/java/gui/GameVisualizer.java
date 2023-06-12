@@ -87,14 +87,17 @@ public class GameVisualizer extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Graphics2D g2d = (Graphics2D) g;
-        drawRobot(g2d, robotController);
-        drawTarget(g2d, m_targetPositionX, m_targetPositionY);
+        Graphics2D g2d = (Graphics2D) g.create();
+        try {
+            drawRobot(g2d, robotController);
+            drawTarget(g2d, m_targetPositionX, m_targetPositionY);
+        } finally {
+            g2d.dispose();
+        }
     }
 
-
     private void drawTarget(Graphics2D g, int x, int y) {
-        AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+        AffineTransform t = new AffineTransform();
         g.setTransform(t);
         g.setColor(Color.GREEN);
         fillOval(g, x, y, 5, 5);
