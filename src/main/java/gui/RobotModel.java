@@ -57,7 +57,7 @@ public class RobotModel extends Observable {
         m_robotDirection = newDirection;
 
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public void updateRobotPosition() {

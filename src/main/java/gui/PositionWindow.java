@@ -27,7 +27,7 @@ public class PositionWindow extends JInternalFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        EventQueue.invokeLater(this::updateCoords);
+        if (arg instanceof RobotModel) EventQueue.invokeLater(this::updateCoords);
     }
 
     void updateCoords() {

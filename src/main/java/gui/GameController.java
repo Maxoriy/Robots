@@ -5,10 +5,10 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RobotController {
+public class GameController {
     private final RobotModel robotModel;
 
-    public RobotController(RobotModel robotModel) {
+    public GameController(RobotModel robotModel) {
         this.robotModel = robotModel;
         Timer timer = new Timer("events generator", true);
         timer.schedule(new TimerTask() {
@@ -27,15 +27,15 @@ public class RobotController {
         return robotModel.getM_targetPositionY();
     }
 
-    public double getPositionX() {
+    public double getRobotX() {
         return robotModel.getM_robotPositionX();
     }
 
-    public double getPositionY() {
+    public double getRobotY() {
         return robotModel.getM_robotPositionY();
     }
 
-    public double getDirection() {
+    public double getRobotDirection() {
         return robotModel.getM_robotDirection();
     }
 

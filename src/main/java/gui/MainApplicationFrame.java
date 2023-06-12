@@ -39,10 +39,11 @@ public class MainApplicationFrame extends JFrame {
 
         logWindow = createLogWindow();
         addWindow(logWindow);
-        
+
         RobotModel robotModel = new RobotModel();
-        RobotController robotController = new RobotController(robotModel);
-        gameWindow = new GameWindow(bundle, robotController, 400, 400);
+        GameController gameController = new GameController(robotModel);
+        GameVisualizer gameVisualizer = new GameVisualizer(gameController, robotModel);
+        gameWindow = new GameWindow(bundle, gameVisualizer, 400, 400);
         addWindow(gameWindow);
 
         positionWindow = new PositionWindow(robotModel, 300, 100);
