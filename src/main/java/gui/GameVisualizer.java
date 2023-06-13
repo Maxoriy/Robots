@@ -1,5 +1,7 @@
 package gui;
 
+import models.*;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -17,16 +19,17 @@ import static tools.MathTools.*;
 
 
 public class GameVisualizer extends JPanel implements Observer {
+    private final RobotModel robotModel;
+    private final TargetModel targetModel;
 
-    private final GameController gameController;
-
-    public GameVisualizer(GameController gameController, RobotModel robotModel) {
-        this.gameController = gameController;
+    public GameVisualizer(RobotModel robotModel, TargetModel targetModel) {
+        this.robotModel = robotModel;
+        this.targetModel = targetModel;
         robotModel.addObserver(this);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gameController.setTargetPosition(e.getPoint());
+                targetModel.setTargetPosition(e.getPoint());
                 repaint();
             }
         });
@@ -40,7 +43,7 @@ public class GameVisualizer extends JPanel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        EventQueue.invokeLater(this::onRedrawEvent);
+        if (arg instanceof RobotModel) EventQueue.invokeLater(this::onRedrawEvent);
     }
 
 
@@ -49,8 +52,8 @@ public class GameVisualizer extends JPanel implements Observer {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g.create();
         try {
-            drawRobot(g2d, gameController);
-            drawTarget(g2d, gameController.getTargetX(), gameController.getTargetY());
+            drawRobot(g2d, robotModel);
+            drawTarget(g2d, targetModel.getTargetX(), targetModel.getTargetY());
         } finally {
             g2d.dispose();
         }
@@ -65,10 +68,10 @@ public class GameVisualizer extends JPanel implements Observer {
         drawOval(g, x, y, 5, 5);
     }
 
-    private void drawRobot(Graphics2D g, GameController gameController) {
-        int robotCenterX = round(gameController.getRobotX());
-        int robotCenterY = round(gameController.getRobotY());
-        AffineTransform t = AffineTransform.getRotateInstance(gameController.getRobotDirection(), robotCenterX, robotCenterY);
+    private void drawRobot(Graphics2D g, RobotModel robotModel) {
+        int robotCenterX = round(robotModel.getM_robotPositionX());
+        int robotCenterY = round(robotModel.getM_robotPositionY());
+        AffineTransform t = AffineTransform.getRotateInstance(robotModel.getM_robotDirection(), robotCenterX, robotCenterY);
         g.setTransform(t);
         g.setColor(Color.MAGENTA);
         fillOval(g, robotCenterX, robotCenterY, 30, 10);

@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 import log.Logger;
+import models.*;
 import org.json.JSONObject;
 import serialization.Configuration;
 
@@ -40,9 +41,10 @@ public class MainApplicationFrame extends JFrame {
         logWindow = createLogWindow();
         addWindow(logWindow);
 
-        RobotModel robotModel = new RobotModel();
-        GameController gameController = new GameController(robotModel);
-        GameVisualizer gameVisualizer = new GameVisualizer(gameController, robotModel);
+        TargetModel targetModel = new TargetModel();
+        RobotModel robotModel = new RobotModel(targetModel);
+        RobotMovementProducer robotMovementProducer = new RobotMovementProducer(robotModel);
+        GameVisualizer gameVisualizer = new GameVisualizer(robotModel, targetModel);
         gameWindow = new GameWindow(bundle, gameVisualizer, 400, 400);
         addWindow(gameWindow);
 
