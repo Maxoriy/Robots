@@ -53,19 +53,21 @@ public class GameVisualizer extends JPanel implements Observer {
         Graphics2D g2d = (Graphics2D) g.create();
         try {
             drawRobot(g2d, robotModel);
-            drawTarget(g2d, targetModel.getTargetX(), targetModel.getTargetY());
+            drawTarget(g2d, targetModel);
         } finally {
             g2d.dispose();
         }
     }
 
-    private void drawTarget(Graphics2D g, int x, int y) {
+    private void drawTarget(Graphics2D g, TargetModel targetModel) {
+        int targetX = targetModel.getTargetX();
+        int targetY = targetModel.getTargetY();
         AffineTransform t = new AffineTransform();
         g.setTransform(t);
         g.setColor(Color.GREEN);
-        fillOval(g, x, y, 5, 5);
+        fillOval(g, targetX, targetY, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, x, y, 5, 5);
+        drawOval(g, targetX, targetY, 5, 5);
     }
 
     private void drawRobot(Graphics2D g, RobotModel robotModel) {
