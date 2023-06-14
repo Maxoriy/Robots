@@ -43,7 +43,7 @@ public class GameVisualizer extends JPanel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof RobotModel) EventQueue.invokeLater(this::onRedrawEvent);
+        if (arg.equals(RobotModel.ROBOT_POSITION_CHANGED)) EventQueue.invokeLater(this::onRedrawEvent);
     }
 
 

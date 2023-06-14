@@ -11,6 +11,7 @@ public class RobotModel extends Observable {
     public static final double maxVelocity = 0.1;
     public static final double maxAngularVelocity = 0.001;
     private final TargetModel targetModel;
+    public final static String ROBOT_POSITION_CHANGED = "The robot's position has changed";
 
     public RobotModel(TargetModel targetModel) {
         this.targetModel = targetModel;
@@ -45,7 +46,7 @@ public class RobotModel extends Observable {
         m_robotPositionY = newY;
         m_robotDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         setChanged();
-        notifyObservers(this);
+        notifyObservers(ROBOT_POSITION_CHANGED);
     }
 
     public void updateRobotPosition() {
