@@ -3,10 +3,12 @@ package gui;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
-public class Components {
-    public static void translateСomponents(ResourceBundle bundle) {
+public class Components implements Translatable {
+
+    @Override
+    public void translate(ResourceBundle bundle) {
         UIManager.put("InternalFrame.iconButtonToolTip", bundle.getString("minimize"));
-        UIManager.put("InternalFrame.maxButtonToolTip", bundle.getString("minimize"));
+        UIManager.put("InternalFrame.maxButtonToolTip", bundle.getString("maximize"));
         UIManager.put("InternalFrame.closeButtonToolTip", bundle.getString("close"));
 
         UIManager.put("InternalFrameTitlePane.restoreButtonText", bundle.getString("restore"));
@@ -15,6 +17,5 @@ public class Components {
         UIManager.put("InternalFrameTitlePane.minimizeButtonText", bundle.getString("minimize"));
         UIManager.put("InternalFrameTitlePane.maximizeButtonText", bundle.getString("maximize"));
         UIManager.put("InternalFrameTitlePane.closeButtonText", bundle.getString("close"));
-
     }
 }

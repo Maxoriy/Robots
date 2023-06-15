@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -21,16 +22,16 @@ import serialization.Configuration;
  */
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
-    private final ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("resources");
     private final Configuration configuration = new Configuration();
     private final LogWindow logWindow;
     private final GameWindow gameWindow;
     private final PositionWindow positionWindow;
+    private final Components components;
 
-    public MainApplicationFrame(ResourceBundle defaultBundle, int inset) {
+    public MainApplicationFrame(int inset) {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
-        bundle = defaultBundle;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset,
                 screenSize.width - inset * 2,
@@ -45,7 +46,7 @@ public class MainApplicationFrame extends JFrame {
         RobotModel robotModel = new RobotModel(targetModel);
         RobotMovementProducer robotMovementProducer = new RobotMovementProducer(robotModel);
         GameVisualizer gameVisualizer = new GameVisualizer(robotModel, targetModel);
-        gameWindow = new GameWindow(bundle, gameVisualizer, 400, 400);
+        gameWindow = new GameWindow(gameVisualizer, 400, 400);
         addWindow(gameWindow);
 
         positionWindow = new PositionWindow(robotModel, 300, 100);
@@ -61,7 +62,8 @@ public class MainApplicationFrame extends JFrame {
                 ExitConfirm();
             }
         });
-
+        components = new Components();
+        translate();
     }
 
     protected LogWindow createLogWindow() {
@@ -84,9 +86,40 @@ public class MainApplicationFrame extends JFrame {
 
         menuBar.add(createLookAndFeelMenu());
         menuBar.add(createTestMenu());
+        menuBar.add(createLanguageMenu());
         menuBar.add(createExitMenu());
 
         return menuBar;
+    }
+
+    private JMenu createLanguageMenu() {
+        JMenu languageMenu = new JMenu(bundle.getString("languageMenu"));
+        languageMenu.setMnemonic(KeyEvent.VK_X);
+
+        JMenuItem russian = new JMenuItem(bundle.getString("Russian"));
+        russian.addActionListener((event) -> {
+            Locale.setDefault(new Locale("ru"));
+            bundle = ResourceBundle.getBundle("resources", Locale.getDefault());
+            translate();
+        });
+        languageMenu.add(russian);
+
+        JMenuItem english = new JMenuItem(bundle.getString("English"));
+        english.addActionListener((event) -> {
+            Locale.setDefault(new Locale("en"));
+            bundle = ResourceBundle.getBundle("resources", Locale.getDefault());
+            translate();
+        });
+        languageMenu.add(english);
+        return languageMenu;
+    }
+
+    private void translate() {
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            ((Translatable) frame).translate(bundle);
+        }
+        setJMenuBar(generateMenuBar());
+        components.translate(bundle);
     }
 
     private JMenu createLookAndFeelMenu() {
@@ -126,7 +159,7 @@ public class MainApplicationFrame extends JFrame {
 
     private JMenu createExitMenu() {
         JMenu exitMenu = new JMenu(bundle.getString("quit"));
-        exitMenu.setMnemonic(KeyEvent.VK_X);
+        exitMenu.setMnemonic(KeyEvent.VK_L);
         JMenuItem exitMenuItem = new JMenuItem(bundle.getString("ExitTheApplication"), KeyEvent.VK_S);
         exitMenuItem.addActionListener((event) -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
         exitMenu.add(exitMenuItem);
