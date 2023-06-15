@@ -21,13 +21,13 @@ import serialization.Configuration;
  * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
  */
 public class MainApplicationFrame extends JFrame {
+    private final String RESOURCES_NAME = "resources";
     private final JDesktopPane desktopPane = new JDesktopPane();
-    private ResourceBundle bundle = ResourceBundle.getBundle("resources");
+    private ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES_NAME);
     private final Configuration configuration = new Configuration();
     private final LogWindow logWindow;
     private final GameWindow gameWindow;
     private final PositionWindow positionWindow;
-    private final Components components;
 
     public MainApplicationFrame(int inset) {
         //Make the big window be indented 50 pixels from each edge
@@ -62,7 +62,6 @@ public class MainApplicationFrame extends JFrame {
                 ExitConfirm();
             }
         });
-        components = new Components();
         translate();
     }
 
@@ -99,7 +98,7 @@ public class MainApplicationFrame extends JFrame {
         JMenuItem russian = new JMenuItem(bundle.getString("Russian"));
         russian.addActionListener((event) -> {
             Locale.setDefault(new Locale("ru"));
-            bundle = ResourceBundle.getBundle("resources", Locale.getDefault());
+            bundle = ResourceBundle.getBundle(RESOURCES_NAME, Locale.getDefault());
             translate();
         });
         languageMenu.add(russian);
@@ -107,7 +106,7 @@ public class MainApplicationFrame extends JFrame {
         JMenuItem english = new JMenuItem(bundle.getString("English"));
         english.addActionListener((event) -> {
             Locale.setDefault(new Locale("en"));
-            bundle = ResourceBundle.getBundle("resources", Locale.getDefault());
+            bundle = ResourceBundle.getBundle(RESOURCES_NAME, Locale.getDefault());
             translate();
         });
         languageMenu.add(english);
@@ -119,7 +118,7 @@ public class MainApplicationFrame extends JFrame {
             ((Translatable) frame).translate(bundle);
         }
         setJMenuBar(generateMenuBar());
-        components.translate(bundle);
+        Components.translate(bundle);
     }
 
     private JMenu createLookAndFeelMenu() {
