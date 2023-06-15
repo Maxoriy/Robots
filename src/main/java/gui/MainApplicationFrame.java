@@ -23,7 +23,7 @@ import serialization.Configuration;
 public class MainApplicationFrame extends JFrame {
     private final String RESOURCES_NAME = "resources";
     private final JDesktopPane desktopPane = new JDesktopPane();
-    private ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES_NAME);
+    private ResourceBundle bundle = getDefaultBundle();
     private final Configuration configuration = new Configuration();
     private final LogWindow logWindow;
     private final GameWindow gameWindow;
@@ -111,6 +111,13 @@ public class MainApplicationFrame extends JFrame {
         });
         languageMenu.add(english);
         return languageMenu;
+    }
+
+    private ResourceBundle getDefaultBundle() {
+        String defaultLanguage = Locale.getDefault().getLanguage();
+        if (defaultLanguage.equals("en") || defaultLanguage.equals("ru"))
+            return ResourceBundle.getBundle(RESOURCES_NAME, Locale.getDefault());
+        return ResourceBundle.getBundle(RESOURCES_NAME, new Locale("en"));
     }
 
     private void translate() {
