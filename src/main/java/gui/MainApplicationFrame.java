@@ -144,7 +144,7 @@ public class MainApplicationFrame extends JFrame {
                 null);
         if (confirm == JOptionPane.YES_OPTION) {
             saveConfiguration();
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            dispose();
         }
     }
 
