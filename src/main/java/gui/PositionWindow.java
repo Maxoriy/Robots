@@ -6,8 +6,9 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle;
 
-public class PositionWindow extends JInternalFrame implements Observer {
+public class PositionWindow extends JInternalFrame implements Observer, Translatable {
     private final JLabel labelX;
     private final JLabel labelY;
     private final RobotModel m_RobotModel;
@@ -35,5 +36,10 @@ public class PositionWindow extends JInternalFrame implements Observer {
     void updateCoords() {
         labelX.setText("X: %f".formatted(m_RobotModel.getM_robotPositionX()));
         labelY.setText("Y: %f".formatted(m_RobotModel.getM_robotPositionY()));
+    }
+
+    @Override
+    public void translate(ResourceBundle bundle) {
+        setTitle(bundle.getString("positionWindowHeader"));
     }
 }
