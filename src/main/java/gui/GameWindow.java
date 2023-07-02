@@ -1,10 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.util.ResourceBundle;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import java.util.ResourceBundle;
 
 public class GameWindow extends JInternalFrame {
     public GameWindow(ResourceBundle bundle, int width, int height) {

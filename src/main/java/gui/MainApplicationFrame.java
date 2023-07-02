@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 import log.Logger;
+import org.json.JSONObject;
+import serialization.Configuration;
 
 /**
  * Что требуется сделать:
@@ -19,6 +21,9 @@ import log.Logger;
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final ResourceBundle bundle;
+    private final Configuration configuration = new Configuration();
+    private final LogWindow logWindow;
+    private final GameWindow gameWindow;
 
     public MainApplicationFrame(ResourceBundle defaultBundle, int inset) {
         //Make the big window be indented 50 pixels from each edge
@@ -31,9 +36,12 @@ public class MainApplicationFrame extends JFrame {
 
         setContentPane(desktopPane);
 
+        logWindow = createLogWindow();
+        addWindow(logWindow);
+        gameWindow = new GameWindow(bundle, 400, 400);
+        addWindow(gameWindow);
 
-        addWindow(createLogWindow());
-        addWindow(new GameWindow(bundle, 400, 400));
+        loadConfiguration();
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -124,7 +132,36 @@ public class MainApplicationFrame extends JFrame {
                 null,
                 new String[]{bundle.getString("yes"), bundle.getString("no")},
                 null);
-        if (confirm == JOptionPane.YES_OPTION) setDefaultCloseOperation(EXIT_ON_CLOSE);
+        if (confirm == JOptionPane.YES_OPTION) {
+            saveConfiguration();
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+        }
+    }
+
+    private void saveConfiguration() {
+        JSONObject json = new JSONObject();
+        saveConfigurationElement("logWindow", json, logWindow);
+        saveConfigurationElement("gameWindow", json, gameWindow);
+        configuration.save(json);
+    }
+
+    private void saveConfigurationElement(String name, JSONObject json, JInternalFrame frame) {
+        json.put(name + "X", frame.getX());
+        json.put(name + "Y", frame.getY());
+        json.put(name + "Width", frame.getWidth());
+        json.put(name + "Height", frame.getHeight());
+    }
+
+    private void loadConfiguration() {
+        JSONObject config = configuration.load();
+        if (config.has("logWindowWidth") && config.has("logWindowX")) {
+            logWindow.setSize(config.optInt("logWindowWidth"), config.optInt("logWindowHeight"));
+            logWindow.setLocation(config.optInt("logWindowX"), config.optInt("logWindowY"));
+        }
+        if (config.has("gameWindowWidth") && config.has("gameWindowX")) {
+            gameWindow.setSize(config.optInt("gameWindowWidth"), config.optInt("gameWindowHeight"));
+            gameWindow.setLocation(config.optInt("gameWindowX"), config.optInt("gameWindowY"));
+        }
     }
 
     private void setLookAndFeel(String className) {
